@@ -1306,4 +1306,87 @@ void Solver::error (const char * fmt, ...) {
   va_end (ap);
 }
 
+/*------------------------------------------------------------------------*/
+
+// Extending API (Christoph Jabs)
+
+bool Solver::preserves_sat (int lit) {
+  TRACE ("preserves_sat", lit);
+  REQUIRE_VALID_STATE ();
+  REQUIRE_VALID_LIT (lit);
+  REQUIRE (state () == SATISFIED,
+    "can only check if preserves sat in satisfied state");
+  if (!external->extended) external->extend ();
+  int val = external->ival (lit);
+  int idx = abs (lit);
+  bool res;
+  if (val > 0) res = true;
+  else if (idx > external->max_var) res = true;
+  else {
+    int iidx = external->e2i[idx];
+    int ilit = lit > 0 ? iidx : -iidx;
+    assert ((internal->val (ilit) > 0) == (val > 0));
+    res = true;
+    // Check if watched clauses are satisfied
+    for (const auto & watch : internal->watches (-ilit)) {
+      bool cl_sat = false;
+      if (watch.blit != ilit && internal->val (watch.blit) > 0) {
+        continue;
+      } else {
+        for (size_t i = 0; i < watch.clause->size; ++i) {
+          int olit = watch.clause->literals[i];
+          if (olit == -ilit) continue;
+          if (internal->val (olit) > 0) {
+            cl_sat = true;
+            break;
+          }
+        }
+      }
+      if (!cl_sat) {
+        res = false;
+        break;
+      }
+    }
+  }
+  LOG_API_CALL_RETURNS ("preserves_sat", lit, res);
+  return res;
+}
+
+bool Solver::assign_if_preserves_sat (int lit) {
+  TRACE ("assign_if_preserves_sat", lit);
+  REQUIRE_VALID_STATE ();
+  REQUIRE_VALID_LIT (lit);
+  REQUIRE (state () == SATISFIED,
+    "can only check if preserves sat in satisfied state");
+  if (!external->extended) external->extend ();
+  int val = external->ival (lit);
+  int idx = abs (lit);
+  bool res;
+  if (val > 0) res = true;
+  else if (idx > external->max_var) res = true;
+  else if (!preserves_sat(lit)) res = false;
+  else {
+    int iidx = external->e2i[idx];
+    int ilit = lit > 0 ? iidx : -iidx;
+    assert ((internal->val (ilit) > 0) == (val > 0));
+    // Assign new polarity of variable in internal model, trace and saved phase
+    // Code based on `search_assign` in `propagate.cpp`
+    const signed char pol = sign (lit);
+    internal->vals[iidx] = pol;
+    internal->vals[-iidx] = -pol;
+    assert (internal->val (ilit) > 0);
+    assert (internal->val (-ilit) < 0);
+    Var & v = internal->var (iidx);
+    if (!internal->searching_lucky_phases)
+      internal->phases.saved[iidx] = pol;
+    internal->trail[v.trail] = ilit;
+    v.reason = 0; // Make this a decision
+    res = true;
+    // Update external model
+    external->vals[idx] = lit > 0;
+  }
+  LOG_API_CALL_RETURNS ("assign_if_preserves_sat", lit, res);
+  return res;
+}
+
 }

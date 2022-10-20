@@ -705,6 +705,25 @@ public:
   //
   static void build (FILE * file, const char * prefix = "c ");
 
+  /*----------------------------------------------------------------------*/
+
+  // Extending API (Christoph Jabs)
+
+  //------------------------------------------------------------------------
+  // Check if assigning a literal preserves satisfiability
+  //
+  //   require (SATISFIED)
+  //   ensure (SATISFIED)
+  //
+  bool preserves_sat (int lit);
+
+  // Assigns a literal if it preserves satisfiability
+  //
+  //   require (SATISFIED)
+  //   ensure (SATISFIED)
+  //
+  bool assign_if_preserves_sat (int lit);
+
 private:
 
   //==== start of state ====================================================
