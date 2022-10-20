@@ -179,7 +179,7 @@ int ccadical_frozen (CCaDiCaL * ptr, int lit) {
 
 /*------------------------------------------------------------------------*/
 
-// Extending C API (chrjabs)
+// Extending C API (Christoph Jabs)
 
 bool ccadical_configure(CCaDiCaL * ptr, const char * name) {
   return ((Wrapper*) ptr)->solver->configure (name);
@@ -211,7 +211,7 @@ int64_t ccadical_redundant (CCaDiCaL * wrapper) {
   return ((Wrapper*) wrapper)->solver->redundant ();
 }
 
-int ccadical_simplify (CCaDiCaL * wrapper, int rounds) {
+int ccadical_simplify_rounds (CCaDiCaL * wrapper, int rounds) {
   return ((Wrapper*) wrapper)->solver->simplify (rounds);
 }
 

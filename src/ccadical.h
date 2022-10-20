@@ -50,7 +50,7 @@ int ccadical_simplify (CCaDiCaL *);
 
 /*------------------------------------------------------------------------*/
 
-// Extending C API (chrjabs)
+// Extending C API (Christoph Jabs)
 
 bool ccadical_configure(CCaDiCaL *, const char *);
 void ccadical_phase(CCaDiCaL *, int lit);
@@ -59,7 +59,7 @@ int ccadical_vars(CCaDiCaL *);
 bool ccadical_set_option_ret (CCaDiCaL *, const char * name, int val);
 bool ccadical_limit_ret (CCaDiCaL *, const char * name, int val);
 int64_t ccadical_redundant (CCaDiCaL *);
-int ccadical_simplify (CCaDiCaL *, int rounds);
+int ccadical_simplify_rounds (CCaDiCaL *, int rounds);
 
 /*------------------------------------------------------------------------*/
 
