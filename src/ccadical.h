@@ -50,6 +50,19 @@ int ccadical_simplify (CCaDiCaL *);
 
 /*------------------------------------------------------------------------*/
 
+// Extending C API (chrjabs)
+
+bool ccadical_configure(CCaDiCaL *, const char *);
+void ccadical_phase(CCaDiCaL *, int lit);
+void ccadical_unphase(CCaDiCaL *, int lit);
+int ccadical_vars(CCaDiCaL *);
+bool ccadical_set_option_ret (CCaDiCaL *, const char * name, int val);
+bool ccadical_limit_ret (CCaDiCaL *, const char * name, int val);
+int64_t ccadical_redundant (CCaDiCaL *);
+int ccadical_simplify (CCaDiCaL *, int rounds);
+
+/*------------------------------------------------------------------------*/
+
 // Support legacy names used before moving to more IPASIR conforming names.
 
 #define ccadical_reset ccadical_release

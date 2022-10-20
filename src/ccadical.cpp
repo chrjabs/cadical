@@ -177,4 +177,44 @@ int ccadical_frozen (CCaDiCaL * ptr, int lit) {
   return ((Wrapper*) ptr)->solver->frozen (lit);
 }
 
+/*------------------------------------------------------------------------*/
+
+// Extending C API (chrjabs)
+
+bool ccadical_configure(CCaDiCaL * ptr, const char * name) {
+  return ((Wrapper*) ptr)->solver->configure (name);
+}
+
+void ccadical_phase(CCaDiCaL * ptr, int lit) {
+  ((Wrapper*) ptr)->solver->phase (lit);
+}
+
+void ccadical_unphase(CCaDiCaL * ptr, int lit) {
+  ((Wrapper*) ptr)->solver->unphase (lit);
+}
+
+int ccadical_vars(CCaDiCaL * ptr) {
+  return ((Wrapper*) ptr)->solver->vars ();
+}
+
+bool ccadical_set_option_ret (CCaDiCaL * wrapper,
+                              const char * name, int val) {
+  return ((Wrapper*) wrapper)->solver->set (name, val);
+}
+
+bool ccadical_limit_ret (CCaDiCaL * wrapper,
+                         const char * name, int val) {
+  return ((Wrapper*) wrapper)->solver->limit (name, val);
+}
+
+int64_t ccadical_redundant (CCaDiCaL * wrapper) {
+  return ((Wrapper*) wrapper)->solver->redundant ();
+}
+
+int ccadical_simplify (CCaDiCaL * wrapper, int rounds) {
+  return ((Wrapper*) wrapper)->solver->simplify (rounds);
+}
+
+/*------------------------------------------------------------------------*/
+
 }
