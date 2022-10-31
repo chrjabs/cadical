@@ -215,6 +215,10 @@ int ccadical_simplify_rounds (CCaDiCaL * wrapper, int rounds) {
   return ((Wrapper*) wrapper)->solver->simplify (rounds);
 }
 
+void ccadical_reserve (CCaDiCaL * wrapper, int min_max_var) {
+  return ((Wrapper*) wrapper)->solver->reserve (min_max_var);
+}
+
 /*------------------------------------------------------------------------*/
 
 }
