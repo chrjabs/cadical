@@ -590,6 +590,12 @@ public:
   void unphase (int lit);
 
   //------------------------------------------------------------------------
+  // Get some selected statistics
+  int64_t propagations () const;
+  int64_t decisions () const;
+  int64_t conflicts () const;
+
+  //------------------------------------------------------------------------
 
   // Enables clausal proof tracing in DRAT format and returns 'true' if
   // successfully opened for writing.  Writing proofs has to be enabled

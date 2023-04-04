@@ -61,6 +61,9 @@ bool ccadical_limit_ret (CCaDiCaL *, const char * name, int val);
 int64_t ccadical_redundant (CCaDiCaL *);
 int ccadical_simplify_rounds (CCaDiCaL *, int rounds);
 void ccadical_reserve (CCaDiCaL *, int min_max_var);
+int64_t ccadical_propagations(CCaDiCaL *);
+int64_t ccadical_decisions(CCaDiCaL *);
+int64_t ccadical_conflicts(CCaDiCaL *);
 
 /*------------------------------------------------------------------------*/
 

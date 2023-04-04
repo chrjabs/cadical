@@ -219,6 +219,18 @@ void ccadical_reserve (CCaDiCaL * wrapper, int min_max_var) {
   return ((Wrapper*) wrapper)->solver->reserve (min_max_var);
 }
 
+int64_t ccadical_propagations (CCaDiCaL * wrapper) {
+  return ((Wrapper*) wrapper)->solver->propagations ();
+}
+
+int64_t ccadical_decisions (CCaDiCaL * wrapper) {
+  return ((Wrapper*) wrapper)->solver->decisions ();
+}
+
+int64_t ccadical_conflicts (CCaDiCaL * wrapper) {
+  return ((Wrapper*) wrapper)->solver->conflicts ();
+}
+
 /*------------------------------------------------------------------------*/
 
 }
