@@ -153,6 +153,30 @@ void External::assume (int elit) {
   internal->assume (ilit);
 }
 
+bool External::flip (int elit) {
+  assert (elit);
+  assert (elit != INT_MIN);
+  int eidx = abs (elit);
+  if (eidx > max_var) return false;
+  if (marked (witness, elit)) return false;
+  int ilit = e2i[eidx];
+  if (!ilit) return false;
+  bool res = internal->flip (ilit);
+  if (res && extended) reset_extended ();
+  return res;
+}
+
+bool External::flippable (int elit) {
+  assert (elit);
+  assert (elit != INT_MIN);
+  int eidx = abs (elit);
+  if (eidx > max_var) return false;
+  if (marked (witness, elit)) return false;
+  int ilit = e2i[eidx];
+  if (!ilit) return false;
+  return internal->flippable (ilit);
+}
+
 bool External::failed (int elit) {
   assert (elit);
   assert (elit != INT_MIN);
@@ -186,9 +210,13 @@ void External::phase (int elit) {
   assert (elit);
   assert (elit != INT_MIN);
   int eidx = abs (elit);
-  if (eidx > max_var) return;
+  if (eidx > max_var) {
+UNUSED:
+    LOG ("forcing phase of unused external %d ignored", elit);
+    return;
+  }
   int ilit = e2i[eidx];
-  if (!ilit) return;
+  if (!ilit) goto UNUSED;
   if (elit < 0) ilit = -ilit;
   internal->phase (ilit);
 }
@@ -197,9 +225,13 @@ void External::unphase (int elit) {
   assert (elit);
   assert (elit != INT_MIN);
   int eidx = abs (elit);
-  if (eidx > max_var) return;
+  if (eidx > max_var) {
+UNUSED:
+    LOG ("resetting forced phase of unused external %d ignored", elit);
+    return;
+  }
   int ilit = e2i[eidx];
-  if (!ilit) return;
+  if (!ilit) goto UNUSED;
   if (elit < 0) ilit = -ilit;
   internal->unphase (ilit);
 }
@@ -244,18 +276,24 @@ void External::check_solve_result (int res) {
 void External::update_molten_literals () {
   if (!internal->opts.checkfrozen) return;
   assert ((size_t) max_var + 1 == moltentab.size ());
+#ifdef LOGGING
   int registered = 0, molten = 0;
+#endif
   for (auto lit : vars) {
     if (moltentab[lit]) {
       LOG ("skipping already molten literal %d", lit);
+#ifdef LOGGING
       molten++;
+#endif
     } else if (frozen (lit))
       LOG ("skipping currently frozen literal %d", lit);
     else {
       LOG ("new molten literal %d", lit);
       moltentab[lit] = true;
+#ifdef LOGGING
       registered++;
       molten++;
+#endif
     }
   }
   LOG ("registered %d new molten literals", registered);
@@ -356,7 +394,9 @@ void External::check_assignment (int (External::*a)(int) const) {
   bool satisfied = false;
   const auto end = original.end ();
   auto start = original.begin (), i = start;
+#ifndef QUIET
   int64_t count = 0;
+#endif
   for (; i != end; i++) {
     int lit = *i;
     if (!lit) {
@@ -370,7 +410,9 @@ void External::check_assignment (int (External::*a)(int) const) {
       }
       satisfied = false;
       start = i + 1;
+#ifndef QUIET
       count++;
+#endif
     } else if (!satisfied && (this->*a) (lit) > 0) satisfied = true;
   }
   VERBOSE (1,

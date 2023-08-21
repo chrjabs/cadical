@@ -172,14 +172,14 @@ log_api_call_returns (Internal * internal, const char * name, bool res) {
 static void
 log_api_call_returns (Internal * internal, const char * name, int res) {
   char fmt[32];
-  sprintf (fmt, "returns '%d'", res);
+  snprintf (fmt, sizeof fmt, "returns '%d'", res);
   log_api_call (internal, name, fmt);
 }
 
 static void
 log_api_call_returns (Internal * internal, const char * name, int64_t res) {
   char fmt[32];
-  sprintf (fmt, "returns '%" PRId64 "'", res);
+  snprintf (fmt, sizeof fmt, "returns '%" PRId64 "'", res);
   log_api_call (internal, name, fmt);
 }
 
@@ -187,7 +187,7 @@ static void
 log_api_call_returns (Internal * internal,
                       const char * name, int lit, int res) {
   char fmt[32];
-  sprintf (fmt, "returns '%d'", res);
+  snprintf (fmt, sizeof fmt, "returns '%d'", res);
   log_api_call (internal, name, lit, fmt);
 }
 
@@ -258,7 +258,7 @@ do { \
 
 #define TRACE(...) \
 do { \
-  if ((this == 0)) break; \
+  /*if ((this == 0)) break; */ /* gcc-12 produces warning */ \
   if ((internal == 0)) break; \
   LOG_API_CALL_BEGIN (__VA_ARGS__); \
   if (!trace_api_file) break; \
@@ -276,6 +276,13 @@ void Solver::trace_api_call (const char * s0, int i1) const {
   assert (trace_api_file);
   LOG ("TRACE %s %d", s0, i1);
   fprintf (trace_api_file, "%s %d\n", s0, i1);
+  fflush (trace_api_file);
+}
+
+void Solver::trace_api_call (const char * s0, const char * s1) const {
+  assert (trace_api_file);
+  LOG ("TRACE %s %s", s0, s1);
+  fprintf (trace_api_file, "%s %s\n", s0, s1);
   fflush (trace_api_file);
 }
 
@@ -513,6 +520,7 @@ bool Solver::is_valid_configuration (const char * name) {
 }
 
 bool Solver::configure (const char * name) {
+  TRACE ("configure", name);
   LOG_API_CALL_BEGIN ("configure", name);
   REQUIRE_VALID_STATE ();
   REQUIRE (state () == CONFIGURING,
@@ -656,6 +664,32 @@ int Solver::val (int lit) {
   if (!external->extended) external->extend ();
   int res = external->ival (lit);
   LOG_API_CALL_RETURNS ("val", lit, res);
+  assert (state () == SATISFIED);
+  assert (res == lit || res == -lit);
+  return res;
+}
+
+bool Solver::flip (int lit) {
+  TRACE ("flip", lit);
+  REQUIRE_VALID_STATE ();
+  REQUIRE_VALID_LIT (lit);
+  REQUIRE (state () == SATISFIED,
+    "can only flip value in satisfied state");
+  bool res = external->flip (lit);
+  LOG_API_CALL_RETURNS ("flip", lit, res);
+  assert (state () == SATISFIED);
+  return res;
+}
+
+bool Solver::flippable (int lit) {
+  TRACE ("flippable", lit);
+  REQUIRE_VALID_STATE ();
+  REQUIRE_VALID_LIT (lit);
+  REQUIRE (state () == SATISFIED,
+    "can only flip value in satisfied state");
+  bool res = external->flippable (lit);
+  LOG_API_CALL_RETURNS ("flippable", lit, res);
+  assert (state () == SATISFIED);
   return res;
 }
 
@@ -667,6 +701,7 @@ bool Solver::failed (int lit) {
     "can only get failed assumptions in unsatisfied state");
   bool res = external->failed (lit);
   LOG_API_CALL_RETURNS ("failed", lit, res);
+  assert (state () == UNSATISFIED);
   return res;
 }
 
@@ -677,6 +712,7 @@ bool Solver::constraint_failed () {
     "can only determine if constraint failed in unsatisfied state");
   bool res = external->failed_constraint ();
   LOG_API_CALL_RETURNS ("constraint_failed", res);
+  assert (state () == UNSATISFIED);
   return res;
 }
 

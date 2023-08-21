@@ -85,14 +85,17 @@ void Internal::backtrack (int new_level) {
   const size_t end_of_trail = trail.size ();
   size_t i = assigned, j = i;
 
+#ifdef LOGGING
   int reassigned = 0, unassigned = 0;
-
+#endif
   while (i < end_of_trail) {
     int lit = trail[i++];
     Var & v = var (lit);
     if (v.level > new_level) {
       unassign (lit);
+#ifdef LOGGING
       unassigned++;
+#endif
     } else {
       // This is the essence of the SAT'18 paper on chronological
       // backtracking.  It is possible to just keep out-of-order assigned
@@ -105,7 +108,9 @@ void Internal::backtrack (int new_level) {
 #endif
       trail[j] = lit;
       v.trail = j++;
+#ifdef LOGGING
       reassigned++;
+#endif
     }
   }
   trail.resize (j);
@@ -117,6 +122,8 @@ void Internal::backtrack (int new_level) {
   if (propagated > assigned) propagated = assigned;
   if (propagated2 > assigned) propagated2 = assigned;
   if (no_conflict_until > assigned) no_conflict_until = assigned;
+
+  propergated = 0;	// Always go back to root-level.
 
   control.resize (new_level + 1);
   level = new_level;

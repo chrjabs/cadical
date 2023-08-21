@@ -257,6 +257,41 @@ public:
   //
   int val (int lit);
 
+  // Try to flip the value of the given literal without falsifying the
+  // formula.  Returns 'true' if this was successful. Otherwise the model is
+  // not changed and 'false' is returned.  If a literal was eliminated or
+  // substituted flipping will fail on that literal and in particular the
+  // solver will not taint it nor restore any clauses.
+  //
+  // The 'flip' function can only flip the value of a variables not acting
+  // as witness on the reconstruction stack.
+  //
+  // As a side effect of calling this function first all assigned variables
+  // are propagated again without using blocking literal.  Thus the first
+  // call to this function after obtaining a model adds a substantial
+  // overhead.  Subsequent calls will not need to properly propagate again.
+  //
+  // Furthermore if the reconstruction stack is non-empty and has been
+  // traversed to reconstruct a full extended model for eliminated
+  // variables (and to satisfy removed blocked clauses), the values of these
+  // witness variables obtained via 'val' before become invalid. The user
+  // thus will need to call 'val' again after calling 'flip' which will
+  // trigger then a traversal of the reconstruction stack.
+  //
+  // So try to avoid mixing 'flip' and 'val' (for efficiency only).
+  //
+  //   require (SATISFIED)
+  //   ensure (SATISFIED)
+  //
+  bool flip (int lit);
+
+  // Same as 'flip' without actually flipping it.
+  //
+  //   require (SATISFIED)
+  //   ensure (SATISFIED)
+  //
+  bool flippable (int lit);
+
   // Determine whether the valid non-zero literal is in the core.
   // Returns 'true' if the literal is in the core and 'false' otherwise.
   // Note that the core does not have to be minimal.
@@ -781,6 +816,7 @@ private:
 
   void trace_api_call (const char *) const;
   void trace_api_call (const char *, int) const;
+  void trace_api_call (const char *, const char *) const;
   void trace_api_call (const char *, const char *, int) const;
 #endif
 
