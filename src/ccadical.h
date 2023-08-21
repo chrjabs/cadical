@@ -52,20 +52,20 @@ int ccadical_simplify (CCaDiCaL *);
 
 // Extending C API (Christoph Jabs)
 
-bool ccadical_configure(CCaDiCaL *, const char *);
-void ccadical_phase(CCaDiCaL *, int lit);
-void ccadical_unphase(CCaDiCaL *, int lit);
-int ccadical_vars(CCaDiCaL *);
-bool ccadical_set_option_ret (CCaDiCaL *, const char * name, int val);
-bool ccadical_limit_ret (CCaDiCaL *, const char * name, int val);
+bool ccadical_configure (CCaDiCaL *, const char *);
+void ccadical_phase (CCaDiCaL *, int lit);
+void ccadical_unphase (CCaDiCaL *, int lit);
+int ccadical_vars (CCaDiCaL *);
+bool ccadical_set_option_ret (CCaDiCaL *, const char *name, int val);
+bool ccadical_limit_ret (CCaDiCaL *, const char *name, int val);
 int64_t ccadical_redundant (CCaDiCaL *);
 int ccadical_simplify_rounds (CCaDiCaL *, int rounds);
 void ccadical_reserve (CCaDiCaL *, int min_max_var);
-int64_t ccadical_propagations(CCaDiCaL *);
-int64_t ccadical_decisions(CCaDiCaL *);
-int64_t ccadical_conflicts(CCaDiCaL *);
-bool ccadical_flip(CCaDiCaL *, int lit);
-bool ccadical_flippable(CCaDiCaL *, int lit);
+int64_t ccadical_propagations (CCaDiCaL *);
+int64_t ccadical_decisions (CCaDiCaL *);
+int64_t ccadical_conflicts (CCaDiCaL *);
+bool ccadical_flip (CCaDiCaL *, int lit);
+bool ccadical_flippable (CCaDiCaL *, int lit);
 
 /*------------------------------------------------------------------------*/
 

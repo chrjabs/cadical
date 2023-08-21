@@ -178,54 +178,53 @@ int ccadical_frozen (CCaDiCaL *ptr, int lit) {
 
 // Extending C API (Christoph Jabs)
 
-bool ccadical_configure(CCaDiCaL * ptr, const char * name) {
-  return ((Wrapper*) ptr)->solver->configure (name);
+bool ccadical_configure (CCaDiCaL *ptr, const char *name) {
+  return ((Wrapper *) ptr)->solver->configure (name);
 }
 
-void ccadical_phase(CCaDiCaL * ptr, int lit) {
-  ((Wrapper*) ptr)->solver->phase (lit);
+void ccadical_phase (CCaDiCaL *ptr, int lit) {
+  ((Wrapper *) ptr)->solver->phase (lit);
 }
 
-void ccadical_unphase(CCaDiCaL * ptr, int lit) {
-  ((Wrapper*) ptr)->solver->unphase (lit);
+void ccadical_unphase (CCaDiCaL *ptr, int lit) {
+  ((Wrapper *) ptr)->solver->unphase (lit);
 }
 
-int ccadical_vars(CCaDiCaL * ptr) {
-  return ((Wrapper*) ptr)->solver->vars ();
+int ccadical_vars (CCaDiCaL *ptr) {
+  return ((Wrapper *) ptr)->solver->vars ();
 }
 
-bool ccadical_set_option_ret (CCaDiCaL * wrapper,
-                              const char * name, int val) {
-  return ((Wrapper*) wrapper)->solver->set (name, val);
+bool ccadical_set_option_ret (CCaDiCaL *wrapper, const char *name,
+                              int val) {
+  return ((Wrapper *) wrapper)->solver->set (name, val);
 }
 
-bool ccadical_limit_ret (CCaDiCaL * wrapper,
-                         const char * name, int val) {
-  return ((Wrapper*) wrapper)->solver->limit (name, val);
+bool ccadical_limit_ret (CCaDiCaL *wrapper, const char *name, int val) {
+  return ((Wrapper *) wrapper)->solver->limit (name, val);
 }
 
-int64_t ccadical_redundant (CCaDiCaL * wrapper) {
-  return ((Wrapper*) wrapper)->solver->redundant ();
+int64_t ccadical_redundant (CCaDiCaL *wrapper) {
+  return ((Wrapper *) wrapper)->solver->redundant ();
 }
 
-int ccadical_simplify_rounds (CCaDiCaL * wrapper, int rounds) {
-  return ((Wrapper*) wrapper)->solver->simplify (rounds);
+int ccadical_simplify_rounds (CCaDiCaL *wrapper, int rounds) {
+  return ((Wrapper *) wrapper)->solver->simplify (rounds);
 }
 
-void ccadical_reserve (CCaDiCaL * wrapper, int min_max_var) {
-  return ((Wrapper*) wrapper)->solver->reserve (min_max_var);
+void ccadical_reserve (CCaDiCaL *wrapper, int min_max_var) {
+  return ((Wrapper *) wrapper)->solver->reserve (min_max_var);
 }
 
-int64_t ccadical_propagations (CCaDiCaL * wrapper) {
-  return ((Wrapper*) wrapper)->solver->propagations ();
+int64_t ccadical_propagations (CCaDiCaL *wrapper) {
+  return ((Wrapper *) wrapper)->solver->propagations ();
 }
 
-int64_t ccadical_decisions (CCaDiCaL * wrapper) {
-  return ((Wrapper*) wrapper)->solver->decisions ();
+int64_t ccadical_decisions (CCaDiCaL *wrapper) {
+  return ((Wrapper *) wrapper)->solver->decisions ();
 }
 
-int64_t ccadical_conflicts (CCaDiCaL * wrapper) {
-  return ((Wrapper*) wrapper)->solver->conflicts ();
+int64_t ccadical_conflicts (CCaDiCaL *wrapper) {
+  return ((Wrapper *) wrapper)->solver->conflicts ();
 }
 
 bool ccadical_flip (CCaDiCaL *wrapper, int lit) {
@@ -237,5 +236,4 @@ bool ccadical_flippable (CCaDiCaL *wrapper, int lit) {
 }
 
 /*------------------------------------------------------------------------*/
-
 }
