@@ -1,3 +1,13 @@
+Version 1.5.5
+-------------
+
+ - Implementing OTFS during conflict analysis (--otfs)
+
+ - The last literal set by vivification is instantiated (--vivifyinst)
+
+ - more accurate tracking of binary clauses in watch lists by updating
+   the size in watch lists
+
 Version 1.5.4
 -------------
 
