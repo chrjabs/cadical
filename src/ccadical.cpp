@@ -231,6 +231,14 @@ int64_t ccadical_conflicts (CCaDiCaL * wrapper) {
   return ((Wrapper*) wrapper)->solver->conflicts ();
 }
 
+bool ccadical_flip (CCaDiCaL *wrapper, int lit) {
+  return ((Wrapper *) wrapper)->solver->flip (lit);
+}
+
+bool ccadical_flippable (CCaDiCaL *wrapper, int lit) {
+  return ((Wrapper *) wrapper)->solver->flippable (lit);
+}
+
 /*------------------------------------------------------------------------*/
 
 }

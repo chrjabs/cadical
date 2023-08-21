@@ -64,6 +64,8 @@ void ccadical_reserve (CCaDiCaL *, int min_max_var);
 int64_t ccadical_propagations(CCaDiCaL *);
 int64_t ccadical_decisions(CCaDiCaL *);
 int64_t ccadical_conflicts(CCaDiCaL *);
+bool ccadical_flip(CCaDiCaL *, int lit);
+bool ccadical_flippable(CCaDiCaL *, int lit);
 
 /*------------------------------------------------------------------------*/
 
